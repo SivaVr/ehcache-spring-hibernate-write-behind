@@ -14,6 +14,7 @@ public class ApplicationContextProvider implements ApplicationContextAware {
 	}
 
 	public static ApplicationContext getApplicationContext() {
+		System.out.println("ctx"+ctx);
 		return ctx;
 	}
 

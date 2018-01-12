@@ -22,9 +22,9 @@ import net.sf.ehcache.writer.writebehind.operations.SingleOperationType;
 public class SuperHeroCacheWriter implements CacheWriter {
 	private static final Logger log = Logger.getLogger(CacheWriter.class);
 	private final Ehcache cache;
-	@Autowired
-	@Qualifier("superHeroDaoImpl")
-	private SuperHeroDAO superHeroDaoImpl;
+//	@Autowired
+//	@Qualifier("superHeroDaoImpl")
+//	private SuperHeroDAO superHeroDaoImpl;
 
 	public SuperHeroCacheWriter(Ehcache cache) {
 		// TODO Auto-generated constructor stub
@@ -52,10 +52,11 @@ public class SuperHeroCacheWriter implements CacheWriter {
 	@Override
 	public void write(Element element) throws CacheException {
 		// TODO Auto-generated method stub
-		log.info("***Super Hero Cache Writer write:" + element.getObjectValue() + "***");
-		// SuperHeroDAO superHeroDaoImpl = (SuperHeroDAO)
-		// ApplicationContextProvider.getApplicationContext()
-		// .getBean("superHeroDaoImpl");
+		System.out.println("***Super Hero Cache Writer write:" + element.getObjectValue() + "***");
+		 SuperHeroDAO superHeroDaoImpl = (SuperHeroDAO)
+		 ApplicationContextProvider.getApplicationContext()
+		 .getBean("superHeroDaoImpl");
+		 System.out.println("superHeroDaoImpl"+superHeroDaoImpl);
 		SuperHero inserted = superHeroDaoImpl.Save((SuperHero) element.getObjectValue());
 		log.info("***Cache Size : " + cache.getSize());
 		log.info("***Super Hero Cache Writer write to Cache***");
@@ -69,7 +70,7 @@ public class SuperHeroCacheWriter implements CacheWriter {
 	@Override
 	public void writeAll(Collection<Element> elements) throws CacheException {
 		// TODO Auto-generated method stub
-		log.info("***Super Hero Cache Writer write All:" + JsonConverter.toJson(elements) + "***");
+		System.out.println("***Super Hero Cache Writer write All:" + JsonConverter.toJson(elements) + "***");
 		for (Element element : elements) {
 			write(element);
 		}

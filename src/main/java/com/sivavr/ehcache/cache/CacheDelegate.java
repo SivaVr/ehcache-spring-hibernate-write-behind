@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import com.sivavr.ehcache.dao.SuperHeroDAO;
 import com.sivavr.ehcache.model.SuperHero;
 
-
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
@@ -33,11 +32,11 @@ public final class CacheDelegate {
 		log.info("***Initializing Cache Delegate Class***");
 		manager = CacheManager.create(EHCACHE_CONFIG);
 		cache = manager.getCache(CACHE_NAME);
-		log.info("Cahe is:"+cache.toString()+cache);
+		log.info("Cahe is:" + cache.toString() + cache);
 		SuperHeroCacheWriter writer = new SuperHeroCacheWriter(cache);
 		cache.registerCacheWriter(writer);
 		SuperHeroCacheLoader loader = new SuperHeroCacheLoader();
-		cache.registerCacheLoader(loader);		
+		cache.registerCacheLoader(loader);
 	}
 
 	/**
@@ -76,9 +75,10 @@ public final class CacheDelegate {
 		log.info("*** CacheDelegate.addElementToCacheWriter() ***");
 		log.info("before::cache size = " + cache.getSize());
 		// get key
-		log.info("Next Increment:"+superHeroDaoImpl.getsIncrement());
+		log.info("Next Increment:" + superHeroDaoImpl.getsIncrement());
 		long key = superHeroDaoImpl.getsIncrement() + 1;
 		hero.setId(key);
+		log.info("*** CacheDelegateputWithWriter" + hero.getMovie() + "," + hero.getName() + " ***");
 		// put caching
 		cache.putWithWriter(new Element(hero.getId(), hero));
 		log.info("after::cache size = " + cache.getSize());
@@ -104,7 +104,7 @@ public final class CacheDelegate {
 	 */
 	public SuperHero getElementFromCacheLoader(Long key) {
 		log.info("*** CacheDelegate.getElementFromCacheLoader() ***");
-		log.info("cache size = " + cache.getSize()+",cache is:"+cache.toString()+cache);
+		log.info("cache size = " + cache.getSize() + ",cache is:" + cache.toString() + cache);
 		return (SuperHero) cache.getWithLoader(key, null, null).getObjectValue();
 	}
 
