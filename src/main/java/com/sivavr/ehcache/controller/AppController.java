@@ -36,17 +36,16 @@ public class AppController {
 
 	@RequestMapping(value = { "/addNewHero" }, method = RequestMethod.POST)
 	@ResponseBody
-	public String addHero(SuperHero hero, BindingResult result, HttpServletRequest req, HttpServletResponse res,
-			ModelAndView model) {
+	public String addHero(SuperHero hero, ModelAndView model) {
 		superHeroService.Save(hero);
 		return "success";
 	}
 
 	@RequestMapping(value = { "/viewHerosById" }, method = RequestMethod.POST)
 	@ResponseBody
-	public String viewHeroById(SuperHero hero, BindingResult result, HttpServletRequest req, HttpServletResponse res,
-			ModelAndView model) {
-		System.out.println(superHeroService.findById(hero.getId()));
+	public String viewHeroById(SuperHero hero, Model model) {
+		System.out.println("Hero id is:" + hero.getId());
+		//System.out.println("Hero id is:" + superHeroService.findById(hero.getId()));
 		List<SuperHero> heroList = superHeroService.findById(hero.getId());
 
 		return JsonConverter.toJson(heroList);
@@ -54,7 +53,7 @@ public class AppController {
 
 	@RequestMapping(value = { "/viewHeros" }, method = RequestMethod.POST)
 	@ResponseBody
-	public String viewHeros(HttpServletRequest req, HttpServletResponse res, Model model) {
+	public String viewHeros(Model model) {
 		List<SuperHero> heroList = superHeroService.findAll();
 		return JsonConverter.toJson(heroList);
 	}

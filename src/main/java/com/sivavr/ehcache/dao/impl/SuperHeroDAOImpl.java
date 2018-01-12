@@ -2,11 +2,14 @@ package com.sivavr.ehcache.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +18,7 @@ import com.sivavr.ehcache.model.SuperHero;
 
 @Repository("superHeroDaoImpl")
 public class SuperHeroDAOImpl implements SuperHeroDAO {
-
+	private static final Logger log = Logger.getLogger(SuperHeroDAOImpl.class);
 	@Autowired
 	private SessionFactory sessionFactory;
 	Session session = null;
@@ -31,6 +34,7 @@ public class SuperHeroDAOImpl implements SuperHeroDAO {
 	}
 
 	@Override
+	@CacheEvict(value = "herosCache", allEntries = true)
 	public SuperHero Save(SuperHero superHero) {
 		session = sessionFactory.openSession();
 		tx = session.beginTransaction();
@@ -42,13 +46,16 @@ public class SuperHeroDAOImpl implements SuperHeroDAO {
 	}
 
 	@Override
+	@Cacheable(value = "herosCache", key = "#id")
 	public List<SuperHero> findById(Long id) {
+		log.info("--- Accessing Dao Layer: SuperHeroDAOImpl.findById() ---");
+		System.out.println("@@@Hero Impl findByID():id-" + id + "@@@");
 		// TODO Auto-generated method stub
 		session = sessionFactory.openSession();
 		tx = session.beginTransaction();
 		Query q = session.createQuery("from SuperHero WHERE id=" + id);
-		List<SuperHero> result = q.list();	
-		
+		List<SuperHero> result = q.list();
+
 		tx.commit();
 		session.close();
 		return result;
@@ -56,8 +63,10 @@ public class SuperHeroDAOImpl implements SuperHeroDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	@Cacheable("herosCache")
 	public List<SuperHero> findAll() {
 		// TODO Auto-generated method stub
+		log.info("--- Accessing Dao Layer: SuperHeroDAOImpl.findAll() ---");
 		session = sessionFactory.openSession();
 		tx = session.beginTransaction();
 		List<SuperHero> heroList = session.createCriteria(SuperHero.class).list();
@@ -71,7 +80,7 @@ public class SuperHeroDAOImpl implements SuperHeroDAO {
 		// TODO Auto-generated method stub
 		session = sessionFactory.openSession();
 		tx = session.beginTransaction();
-		Query q = session.createQuery("select id from super_heros ORDER BY DESC LIMIT 1");
+		Query q = session.createQuery("select count(*) from SuperHero");
 		List result = q.list();
 		Long increment = new Long(0);
 		if (result.size() == 1) {

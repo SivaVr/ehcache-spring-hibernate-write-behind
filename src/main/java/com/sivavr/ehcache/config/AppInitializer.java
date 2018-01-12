@@ -1,5 +1,7 @@
 package com.sivavr.ehcache.config;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -21,5 +23,6 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		// TODO Auto-generated method stub
 		return new String[] { "/" };
 	}
+
 
 }

@@ -2,7 +2,7 @@ package com.sivavr.ehcache.config;
 
 import java.util.Properties;
 
-import javax.sql.DataSource;
+
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
+import org.apache.commons.dbcp.BasicDataSource;
 import com.sivavr.ehcache.dao.impl.SuperHeroDAOImpl;
 import com.sivavr.ehcache.service.impl.SuperHeroServiceImpl;
 
@@ -35,8 +35,8 @@ public class HibernateConfiguration {
 	}
 
 	@Bean
-	public DataSource dataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+	public BasicDataSource dataSource() {
+	    BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/test_db");
 		dataSource.setUsername("root");

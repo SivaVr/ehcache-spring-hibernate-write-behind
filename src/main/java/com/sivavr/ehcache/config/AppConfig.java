@@ -11,16 +11,15 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@Import({ HibernateConfiguration.class })
-@ComponentScan(basePackages="com.sivavr.ehcache")
+@Import({ HibernateConfiguration.class, EhCacheConfig.class })
+@ComponentScan(basePackages = "com.sivavr.ehcache")
 public class AppConfig extends WebMvcConfigurerAdapter {
-	
-	
+
 	/**
-     * Configure ViewResolvers to deliver preferred views.
-     */
+	 * Configure ViewResolvers to deliver preferred views.
+	 */
 	@Override
-	public void configureViewResolvers(ViewResolverRegistry registry){
+	public void configureViewResolvers(ViewResolverRegistry registry) {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setPrefix("/WEB-INF/views/");
 		viewResolver.setSuffix(".jsp");
@@ -33,10 +32,10 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 		super.addResourceHandlers(registry);
 	}
-	
+
 	/**
-     * Configure ResourceHandlers to serve static resources like CSS/ Javascript etc...
-     */
-	
+	 * Configure ResourceHandlers to serve static resources like CSS/ Javascript
+	 * etc...
+	 */
 
 }
