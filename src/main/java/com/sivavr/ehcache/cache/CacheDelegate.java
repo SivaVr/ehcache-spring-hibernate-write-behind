@@ -6,15 +6,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Repository;
 
 import com.sivavr.ehcache.dao.SuperHeroDAO;
 import com.sivavr.ehcache.model.SuperHero;
 
-import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
@@ -24,9 +20,9 @@ import net.sf.ehcache.config.CacheWriterConfiguration;
 import net.sf.ehcache.config.CacheConfiguration.CacheLoaderFactoryConfiguration;
 
 @Repository("cacheDelegate")
-@DependsOn("hibernateTransactionManager")
+//@DependsOn("hibernateTransactionManager")
 public final class CacheDelegate {
-	private static final Logger log = Logger.getLogger(CacheDelegate.class);
+	private static final Logger LOGGER = Logger.getLogger(CacheDelegate.class);
 	private static final String CACHE_NAME = "herosCache";
 
 	private CacheManager manager;
@@ -36,19 +32,23 @@ public final class CacheDelegate {
 	@Qualifier("superHeroDaoImpl")
 	private SuperHeroDAO superHeroDaoImpl;
 
+	/**
+	 * Default Constructor
+	 */
+
 	public CacheDelegate() {
-		log.info("***Initializing Cache Delegate Class***");
+		LOGGER.info("***Initializing Cache Delegate Class***");
 		net.sf.ehcache.config.Configuration config = new net.sf.ehcache.config.Configuration();
 		config.addCache(cacheConfig());
 		manager = CacheManager.create(config);
 		cache = manager.getCache(CACHE_NAME);
-		log.info("Cahe is:" + cache.toString() + cache + "--DAO Impl=" + superHeroDaoImpl);
 		SuperHeroCacheWriter writer = new SuperHeroCacheWriter(cache);
 		cache.registerCacheWriter(writer);
 		SuperHeroCacheLoader loader = new SuperHeroCacheLoader();
 		cache.registerCacheLoader(loader);
 	}
 
+	@SuppressWarnings("deprecation")
 	private CacheConfiguration cacheConfig() {
 		CacheConfiguration config = new CacheConfiguration();
 		config.setName("");
@@ -101,20 +101,15 @@ public final class CacheDelegate {
 	 */
 
 	public void addElementToCacheWriter(SuperHero hero) {
-		log.info("*** CacheDelegate.addElementToCacheWriter() ***");
-		log.info("before::cache size = " + cache.getSize());
+		LOGGER.info("*** CacheDelegate.addElementToCacheWriter() ***");
+		LOGGER.info("before::cache size = " + cache.getSize());
 		// get key
-		log.info("Next Increment:" + superHeroDaoImpl.getsIncrement());
 		long key = superHeroDaoImpl.getsIncrement() + 1;
 		hero.setId(key);
-		log.info("*** CacheDelegateputWithWriter" + hero.getMovie() + "," + hero.getName() + " ***");
+		LOGGER.info("*** CacheDelegateputWithWriter" + hero.getMovie() + "," + hero.getName() + " ***");
 		// put caching
-		// Cache cache = manager.getCache(CACHE_NAME);
-		// SuperHeroCacheWriter writer = new
-		// SuperHeroCacheWriter(cache,superHeroDaoImpl);
-		// cache.registerCacheWriter(writer);
 		cache.putWithWriter(new Element(hero.getId(), hero));
-		log.info("after::cache size = " + cache.getSize());
+		LOGGER.info("after::cache size = " + cache.getSize());
 	}
 
 	/**
@@ -123,9 +118,10 @@ public final class CacheDelegate {
 	 * @param hero
 	 *            model object instance
 	 */
+	@SuppressWarnings("unchecked")
 	public List<SuperHero> getElementFromCache(Long key) {
-		log.info("*** CacheDelegate.getElementFromCache() ***");
-		log.info("cache size = " + cache.getSize());
+		LOGGER.info("*** CacheDelegate.getElementFromCache() ***");
+		LOGGER.info("cache size = " + cache.getSize());
 		return (List<SuperHero>) cache.get(key).getObjectValue();
 	}
 
@@ -137,12 +133,11 @@ public final class CacheDelegate {
 	 */
 
 	public List<SuperHero> getElementFromCacheLoader(Long key) {
-		log.info("*** CacheDelegate.getElementFromCacheLoader() key is:" + key + " ***");
-		log.info("cache size = " + cache.getSize() + ",cache is:" + cache.toString() + cache);
+		LOGGER.info("*** CacheDelegate.getElementFromCacheLoader() key is:" + key + " ***");
+		LOGGER.info("cache size = " + cache.getSize() + ",cache is:" + cache.toString() + cache);
 		SuperHero hero = (SuperHero) cache.getWithLoader(key, null, null).getObjectValue();
 		List<SuperHero> olist = new ArrayList<SuperHero>();
 		olist.add(hero);
-		log.info("Elements from:" + olist.size());
 		return olist;
 	}
 
@@ -159,8 +154,7 @@ public final class CacheDelegate {
 	 * @return The list
 	 */
 	public List<SuperHero> findAll() {
-		log.info("*** CacheDelegate.findAll() ***");
-		log.info(superHeroDaoImpl);
+		LOGGER.info("*** CacheDelegate.findAll() ***");
 		return superHeroDaoImpl.findAll();
 	}
 

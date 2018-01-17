@@ -18,30 +18,24 @@ public class CahcedSuperHeroDAO implements SuperHeroDAO {
 	private CacheDelegate cacheDelegate;
 
 	@Override
-	public SuperHero Save(SuperHero superHero) {
-		// TODO Auto-generated method stub
+	public SuperHero Save(SuperHero superHero) {		
 		cacheDelegate.addElementToCacheWriter(superHero);
 		return superHero;
 	}
 
 	@Override
-	public SuperHero findById(Long id) {
-		// TODO Auto-generated method stub
-		// SuperHero hero = cacheDelegate.getElementFromCacheLoader(id);
+	public SuperHero findById(Long id) {	
 		List<SuperHero> list = (List<SuperHero>) cacheDelegate.getElementFromCacheLoader(id);
-
 		return (SuperHero) list.get(0);
 	}
 
 	@Override
-	public List<SuperHero> findAll() {
-		// TODO Auto-generated method stub
+	public List<SuperHero> findAll() {	
 		return cacheDelegate.findAll();
 	}
 
 	@Override
-	public Long getsIncrement() {
-		// TODO Auto-generated method stub
+	public Long getsIncrement() {		
 		throw new UnsupportedOperationException("Unsupported get getsIncrement()");
 	}
 

@@ -13,7 +13,7 @@ import com.sivavr.ehcache.service.SuperHeroService;
 
 @Service("superHeroService")
 public class SuperHeroServiceImpl implements SuperHeroService {
-	private static final Logger log = Logger.getLogger(SuperHeroServiceImpl.class);
+	private static final Logger LOGGER = Logger.getLogger(SuperHeroServiceImpl.class);
 	@Autowired
 	@Qualifier("cachedSuperHeroDaoImpl")
 	SuperHeroDAO cachedSuperHeroDaoImpl;
@@ -23,29 +23,25 @@ public class SuperHeroServiceImpl implements SuperHeroService {
 	}
 
 	@Override
-	public SuperHero Save(SuperHero superHero) {
-		// TODO Auto-generated method stub
-		log.info("*** Accessing heroService Save() ***");
+	public SuperHero Save(SuperHero superHero) {	
+		LOGGER.info("*** Accessing heroService Save() ***");
 		return cachedSuperHeroDaoImpl.Save(superHero);
 	}
 
 	@Override
-	public SuperHero findById(Long id) {
-		// TODO Auto-generated method stub
-		log.info("*** Accessing heroService findById() ***");
+	public SuperHero findById(Long id) {		
+		LOGGER.info("*** Accessing heroService findById() ***");
 		return (SuperHero) cachedSuperHeroDaoImpl.findById(id);
 	}
 
 	@Override
-	public List<SuperHero> findAll() {
-		// TODO Auto-generated method stub
-		log.info("*** Accessing heroService findAll() ***");
+	public List<SuperHero> findAll() {		
+		LOGGER.info("*** Accessing heroService findAll() ***");
 		return cachedSuperHeroDaoImpl.findAll();
 	}
 
 	@Override
-	public Long getsIncrement() {
-		// TODO Auto-generated method stub
+	public Long getsIncrement() {	
 		return cachedSuperHeroDaoImpl.getsIncrement();
 	}
 

@@ -1,7 +1,5 @@
 package com.sivavr.ehcache.config;
 
-import javax.servlet.ServletContext;
-
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -13,14 +11,12 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	}
 
 	@Override
-	protected Class<?>[] getServletConfigClasses() {
-		// TODO Auto-generated method stub
+	protected Class<?>[] getServletConfigClasses() {		
 		return new Class[] { AppConfig.class };
 	}
 
 	@Override
-	protected String[] getServletMappings() {
-		// TODO Auto-generated method stub
+	protected String[] getServletMappings() {		
 		return new String[] { "/" };
 	}
 

@@ -9,9 +9,7 @@ import net.sf.ehcache.loader.CacheLoaderFactory;
 public class SuperHeroCacheLoaderFactory extends CacheLoaderFactory {
 
 	@Override
-	public CacheLoader createCacheLoader(Ehcache cache, Properties properties) {
-		// TODO Auto-generated method stub
-		
+	public CacheLoader createCacheLoader(Ehcache cache, Properties properties) {		
 		return new SuperHeroCacheLoader();
 	}
 

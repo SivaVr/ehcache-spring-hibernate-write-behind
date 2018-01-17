@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sivavr.ehcache.controller.ApplicationContextProvider;
 import com.sivavr.ehcache.dao.SuperHeroDAO;
@@ -15,9 +14,7 @@ import net.sf.ehcache.Status;
 import net.sf.ehcache.loader.CacheLoader;
 
 public class SuperHeroCacheLoader implements CacheLoader {
-	private static final Logger log = Logger.getLogger(CacheLoader.class);
-
-	private SuperHeroDAO superHeroDaoImpl;
+	private static final Logger LOGGER = Logger.getLogger(CacheLoader.class);
 
 	@Override
 	public Object load(Object key, Object argument) throws CacheException {
@@ -26,6 +23,7 @@ public class SuperHeroCacheLoader implements CacheLoader {
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map loadAll(Collection keys) {
 		// TODO Auto-generated method stub
@@ -34,14 +32,13 @@ public class SuperHeroCacheLoader implements CacheLoader {
 
 	@Override
 	public Object load(Object key) throws CacheException {
-		// TODO Auto-generated method stub
-		log.info("***Super HeroCache Loader-Load(HeroID)" + key.toString() + "***");
+		LOGGER.info("***Super HeroCache Loader-Load(HeroID)" + key.toString() + "***");
 		SuperHeroDAO superHeroDaoImpl = (SuperHeroDAO) ApplicationContextProvider.getApplicationContext()
 				.getBean("superHeroDaoImpl");
-		System.out.println("superHeroDaoImpl from loader:" + superHeroDaoImpl);
 		return superHeroDaoImpl.findById((Long) key);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map loadAll(Collection keys, Object argument) {
 		// TODO Auto-generated method stub
