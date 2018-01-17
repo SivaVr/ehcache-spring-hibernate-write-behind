@@ -31,11 +31,11 @@ _____________________
 		<p>
 		</p><h4>Menu:</h4>
 		<p></p>		
-			<li>   1) Add Hero</li>
+			<li>Add Hero</li>
 			<br>
-			<li>   2) View Heros</li>
+			<li>View Heros</li>
 			<br>
-			<li>   3) View Heros By Id</li>		
+			<li>View Heros By Id</li>		
 		<br><br>			
 		<div class="view_hero" style="display: block;">			
 			<table style="border-collapse: collapse;" cellspacing="8" cellpadding="8" border="1">
