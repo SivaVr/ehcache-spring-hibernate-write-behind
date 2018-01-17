@@ -24,6 +24,9 @@ _____________________
    3. Create Super Hero - Click on Add hero
    4. Gets the Hero by Id: Fill Id in textbox and Clicks on View button
 
+output
+_______
+
 <html>
 <body>
 	<form action="#">
