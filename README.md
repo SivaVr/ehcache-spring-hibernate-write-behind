@@ -7,13 +7,13 @@ Using mysql 5.1.31 version to support hibernate 4.3.1 session factory
 Build Dependencies
 ___________________
 
-| Requirement 	| Version     |
-| Apache Maven 	| 3.x         |
-| Java JDK 	    | >= 8        |
-| Eclipse / STS | >= Helios   |
-| Mysql 	    | = 5.1.31    |
-| EhCache 	    | = 2.10.0    |
-| Gson 	        | = 1.7.1     |
+| Requirement 	   | Version     |
+| Apache Maven    | 3.x         |
+| Java JDK 	      | >= 8        |
+| Eclipse / STS   | >= Helios   |
+| Mysql 	         | = 5.1.31    |
+| EhCache 	      | = 2.10.0    |
+| Gson 	         | = 1.7.1     |
 
 Building the Project
 _____________________
