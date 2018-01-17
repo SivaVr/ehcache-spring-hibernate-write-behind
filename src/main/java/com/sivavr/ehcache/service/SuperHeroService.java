@@ -7,7 +7,7 @@ import com.sivavr.ehcache.model.SuperHero;
 public interface SuperHeroService {
 	SuperHero Save(SuperHero superHero);
 
-	List<SuperHero> findById(Long id);
+	SuperHero findById(Long id);
 
 	List<SuperHero> findAll();
 

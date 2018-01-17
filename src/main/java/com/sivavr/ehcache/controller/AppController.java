@@ -1,5 +1,6 @@
 package com.sivavr.ehcache.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,8 +56,8 @@ public class AppController {
 		log.info("Hero id is:" + hero.getId());
 		// System.out.println("Hero id is:" +
 		// superHeroService.findById(hero.getId()));
-		List<SuperHero> heroList = (List<SuperHero>) superHeroService.findById(hero.getId());
-
+		List<SuperHero> heroList = new ArrayList<SuperHero>();
+		heroList.add(superHeroService.findById(hero.getId()));
 		return JsonConverter.toJson(heroList);
 	}
 

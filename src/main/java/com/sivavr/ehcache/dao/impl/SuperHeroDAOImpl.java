@@ -47,7 +47,7 @@ public class SuperHeroDAOImpl implements SuperHeroDAO {
 
 	@Override
 	@Cacheable(value = "herosCache", key = "#id")
-	public List<SuperHero> findById(Long id) {
+	public SuperHero findById(Long id) {
 		log.info("--- Accessing Dao Layer: SuperHeroDAOImpl.findById() ---");
 		System.out.println("@@@Hero Impl findByID():id-" + id + "@@@");
 		// TODO Auto-generated method stub
@@ -58,7 +58,7 @@ public class SuperHeroDAOImpl implements SuperHeroDAO {
 
 		tx.commit();
 		session.close();
-		return result;
+		return (SuperHero)result.get(0);
 	}
 
 	@SuppressWarnings("unchecked")

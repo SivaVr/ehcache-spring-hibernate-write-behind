@@ -25,12 +25,12 @@ public class CahcedSuperHeroDAO implements SuperHeroDAO {
 	}
 
 	@Override
-	public List<SuperHero> findById(Long id) {
+	public SuperHero findById(Long id) {
 		// TODO Auto-generated method stub
-	//	SuperHero hero = cacheDelegate.getElementFromCacheLoader(id);
-		List<SuperHero> list = (List<SuperHero>)cacheDelegate.getElementFromCacheLoader(id);
-		
-		return list;
+		// SuperHero hero = cacheDelegate.getElementFromCacheLoader(id);
+		List<SuperHero> list = (List<SuperHero>) cacheDelegate.getElementFromCacheLoader(id);
+
+		return (SuperHero) list.get(0);
 	}
 
 	@Override

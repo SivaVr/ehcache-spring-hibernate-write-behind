@@ -11,7 +11,6 @@ import com.sivavr.ehcache.dao.SuperHeroDAO;
 import com.sivavr.ehcache.model.SuperHero;
 import com.sivavr.ehcache.service.SuperHeroService;
 
-
 @Service("superHeroService")
 public class SuperHeroServiceImpl implements SuperHeroService {
 	private static final Logger log = Logger.getLogger(SuperHeroServiceImpl.class);
@@ -31,10 +30,10 @@ public class SuperHeroServiceImpl implements SuperHeroService {
 	}
 
 	@Override
-	public List<SuperHero> findById(Long id) {
+	public SuperHero findById(Long id) {
 		// TODO Auto-generated method stub
 		log.info("*** Accessing heroService findById() ***");
-		return (List<SuperHero>)cachedSuperHeroDaoImpl.findById(id);
+		return (SuperHero) cachedSuperHeroDaoImpl.findById(id);
 	}
 
 	@Override

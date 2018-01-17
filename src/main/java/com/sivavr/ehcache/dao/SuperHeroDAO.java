@@ -8,7 +8,7 @@ public interface SuperHeroDAO {
 
 	SuperHero Save(SuperHero superHero);
 
-	List<SuperHero> findById(Long id);
+	SuperHero findById(Long id);
 
 	List<SuperHero> findAll();
 	
