@@ -5,11 +5,14 @@ import java.util.Properties;
 
 
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
@@ -17,6 +20,8 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.apache.commons.dbcp.BasicDataSource;
+
+
 import com.sivavr.ehcache.dao.impl.SuperHeroDAOImpl;
 import com.sivavr.ehcache.service.impl.SuperHeroServiceImpl;
 
@@ -24,7 +29,11 @@ import com.sivavr.ehcache.service.impl.SuperHeroServiceImpl;
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.sivavr.ehcache")
 public class HibernateConfiguration {
-
+	public static final Logger LOGGER = LoggerFactory.getLogger(HibernateConfiguration.class);
+	public HibernateConfiguration() {
+		LOGGER.info("Am In Hibernate Configs");
+	}
+	
 	@Bean
 	public LocalSessionFactoryBean sessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();

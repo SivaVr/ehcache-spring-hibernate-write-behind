@@ -11,6 +11,7 @@ public class SuperHeroCacheLoaderFactory extends CacheLoaderFactory {
 	@Override
 	public CacheLoader createCacheLoader(Ehcache cache, Properties properties) {
 		// TODO Auto-generated method stub
+		
 		return new SuperHeroCacheLoader();
 	}
 

@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class SuperHero implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(name = "hero_name", unique = true, nullable = false)

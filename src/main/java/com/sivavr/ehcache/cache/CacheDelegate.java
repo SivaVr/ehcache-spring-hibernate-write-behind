@@ -1,24 +1,32 @@
 package com.sivavr.ehcache.cache;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Repository;
 
 import com.sivavr.ehcache.dao.SuperHeroDAO;
 import com.sivavr.ehcache.model.SuperHero;
 
+import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.CacheWriterConfiguration;
+import net.sf.ehcache.config.CacheConfiguration.CacheLoaderFactoryConfiguration;
 
 @Repository("cacheDelegate")
+@DependsOn("hibernateTransactionManager")
 public final class CacheDelegate {
 	private static final Logger log = Logger.getLogger(CacheDelegate.class);
-	private static final String EHCACHE_CONFIG = "C:/Users/shivakumar.m/git/ehcache-spring-hibernate-write-behind/src/main/resources/ehcache.xml";
 	private static final String CACHE_NAME = "herosCache";
 
 	private CacheManager manager;
@@ -30,13 +38,34 @@ public final class CacheDelegate {
 
 	public CacheDelegate() {
 		log.info("***Initializing Cache Delegate Class***");
-		manager = CacheManager.create(EHCACHE_CONFIG);
+		net.sf.ehcache.config.Configuration config = new net.sf.ehcache.config.Configuration();
+		config.addCache(cacheConfig());
+		manager = CacheManager.create(config);
 		cache = manager.getCache(CACHE_NAME);
-		log.info("Cahe is:" + cache.toString() + cache);
+		log.info("Cahe is:" + cache.toString() + cache + "--DAO Impl=" + superHeroDaoImpl);
 		SuperHeroCacheWriter writer = new SuperHeroCacheWriter(cache);
 		cache.registerCacheWriter(writer);
 		SuperHeroCacheLoader loader = new SuperHeroCacheLoader();
 		cache.registerCacheLoader(loader);
+	}
+
+	private CacheConfiguration cacheConfig() {
+		CacheConfiguration config = new CacheConfiguration();
+		config.setName("");
+		config.setMaxEntriesLocalHeap(1000);
+		config.setEternal(true);
+		config.setOverflowToDisk(false);
+		config.setMemoryStoreEvictionPolicy("LRU");
+		config.cacheWriter(new CacheWriterConfiguration().writeMode(CacheWriterConfiguration.WriteMode.WRITE_BEHIND)
+				.maxWriteDelay(3).rateLimitPerSecond(10).notifyListenersOnException(true).writeCoalescing(true)
+				.writeBatching(true).writeBatchSize(2).retryAttempts(5).retryAttemptDelaySeconds(5)
+				.cacheWriterFactory(new CacheWriterConfiguration.CacheWriterFactoryConfiguration()
+						.className("com.sivavr.ehcache.cache.SuperHeroCacheWriterFactory")
+						.properties("daoImpl=" + superHeroDaoImpl)));
+		config.cacheLoaderFactory(
+				new CacheLoaderFactoryConfiguration().className("com.sivavr.ehcache.cache.SuperHeroCacheLoaderFactory")
+						.properties("type=int;startCounter=10").propertySeparator(";"));
+		return config;
 	}
 
 	/**
@@ -80,6 +109,10 @@ public final class CacheDelegate {
 		hero.setId(key);
 		log.info("*** CacheDelegateputWithWriter" + hero.getMovie() + "," + hero.getName() + " ***");
 		// put caching
+		// Cache cache = manager.getCache(CACHE_NAME);
+		// SuperHeroCacheWriter writer = new
+		// SuperHeroCacheWriter(cache,superHeroDaoImpl);
+		// cache.registerCacheWriter(writer);
 		cache.putWithWriter(new Element(hero.getId(), hero));
 		log.info("after::cache size = " + cache.getSize());
 	}
@@ -90,10 +123,10 @@ public final class CacheDelegate {
 	 * @param hero
 	 *            model object instance
 	 */
-	public SuperHero getElementFromCache(Long key) {
+	public List<SuperHero> getElementFromCache(Long key) {
 		log.info("*** CacheDelegate.getElementFromCache() ***");
 		log.info("cache size = " + cache.getSize());
-		return (SuperHero) cache.get(key).getObjectValue();
+		return (List<SuperHero>) cache.get(key).getObjectValue();
 	}
 
 	/**
@@ -102,10 +135,15 @@ public final class CacheDelegate {
 	 * @param hero
 	 *            model object instance
 	 */
-	public SuperHero getElementFromCacheLoader(Long key) {
-		log.info("*** CacheDelegate.getElementFromCacheLoader() ***");
+
+	public List<SuperHero> getElementFromCacheLoader(Long key) {
+		log.info("*** CacheDelegate.getElementFromCacheLoader() key is:" + key + " ***");
 		log.info("cache size = " + cache.getSize() + ",cache is:" + cache.toString() + cache);
-		return (SuperHero) cache.getWithLoader(key, null, null).getObjectValue();
+		SuperHero hero = (SuperHero) cache.getWithLoader(key, null, null).getObjectValue();
+		List<SuperHero> olist = new ArrayList<SuperHero>();
+		olist.add(hero);
+		log.info("Elements from:" + olist.size());
+		return olist;
 	}
 
 	/**

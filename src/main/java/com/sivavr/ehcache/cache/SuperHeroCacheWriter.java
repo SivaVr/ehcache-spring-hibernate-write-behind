@@ -5,6 +5,9 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import com.sivavr.ehcach.utils.JsonConverter;
 import com.sivavr.ehcache.controller.ApplicationContextProvider;
@@ -22,14 +25,27 @@ import net.sf.ehcache.writer.writebehind.operations.SingleOperationType;
 public class SuperHeroCacheWriter implements CacheWriter {
 	private static final Logger log = Logger.getLogger(CacheWriter.class);
 	private final Ehcache cache;
-//	@Autowired
-//	@Qualifier("superHeroDaoImpl")
-//	private SuperHeroDAO superHeroDaoImpl;
+	// @Autowired
+	// @Qualifier("superHeroDaoImpl")
+	private SuperHeroDAO superHeroDaoImpl;
 
 	public SuperHeroCacheWriter(Ehcache cache) {
 		// TODO Auto-generated constructor stub
+
 		this.cache = cache;
+
+		log.info("++++SuperHeroCacheWriter Constructor cache only:" + cache);
 	}
+
+	// public SuperHeroCacheWriter(Ehcache cache, SuperHeroDAO superHeroDaoImpl)
+	// {
+	// log.info("++++SuperHeroCacheWriter Constructor values cache and impl:" +
+	// cache + superHeroDaoImpl);
+	// this.cache = cache;
+	// this.superHeroDaoImpl = superHeroDaoImpl;
+	// log.info("++++SuperHeroCacheWriter Constructor cache and impl:" + cache +
+	// this.superHeroDaoImpl);
+	// }
 
 	@Override
 	public CacheWriter clone(Ehcache cache) throws CloneNotSupportedException {
@@ -53,15 +69,15 @@ public class SuperHeroCacheWriter implements CacheWriter {
 	public void write(Element element) throws CacheException {
 		// TODO Auto-generated method stub
 		System.out.println("***Super Hero Cache Writer write:" + element.getObjectValue() + "***");
-		 SuperHeroDAO superHeroDaoImpl = (SuperHeroDAO)
-		 ApplicationContextProvider.getApplicationContext()
-		 .getBean("superHeroDaoImpl");
-		 System.out.println("superHeroDaoImpl"+superHeroDaoImpl);
+		SuperHeroDAO superHeroDaoImpl = (SuperHeroDAO) ApplicationContextProvider.getApplicationContext()
+				.getBean("superHeroDaoImpl");
+
+		System.out.println("superHeroDaoImpl" + superHeroDaoImpl + element.getObjectValue());
 		SuperHero inserted = superHeroDaoImpl.Save((SuperHero) element.getObjectValue());
 		log.info("***Cache Size : " + cache.getSize());
 		log.info("***Super Hero Cache Writer write to Cache***");
-		log.info("***Super Hero Cache Writer writed hero id:" + inserted.getId() + " AND Name:+"
-				+ inserted.getName() + " ***");
+		log.info("***Super Hero Cache Writer writed hero id:" + inserted.getId() + " AND Name:+" + inserted.getName()
+				+ " ***");
 		cache.put(new Element(inserted.getId(), inserted));
 		log.info("***Cache Size After inserted : " + cache.getSize());
 
@@ -70,6 +86,7 @@ public class SuperHeroCacheWriter implements CacheWriter {
 	@Override
 	public void writeAll(Collection<Element> elements) throws CacheException {
 		// TODO Auto-generated method stub
+		
 		System.out.println("***Super Hero Cache Writer write All:" + JsonConverter.toJson(elements) + "***");
 		for (Element element : elements) {
 			write(element);

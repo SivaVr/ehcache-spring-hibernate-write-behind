@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -14,8 +15,8 @@ import com.sivavr.ehcache.controller.ApplicationContextProvider;
 
 @Configuration
 @EnableWebMvc
-@Import({ HibernateConfiguration.class, EhCacheConfig.class })
 @ComponentScan(basePackages = "com.sivavr.ehcache")
+
 public class AppConfig extends WebMvcConfigurerAdapter {
 
 	/**
@@ -36,10 +37,10 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		super.addResourceHandlers(registry);
 	}
 
-	@Bean
-	public ApplicationContextProvider applicationContextProvider(){
-		return new ApplicationContextProvider();
-	}
+	// @Bean
+	// public ApplicationContextProvider applicationContextProvder() {
+	// return new ApplicationContextProvider();
+	// }
 	/**
 	 * Configure ResourceHandlers to serve static resources like CSS/ Javascript
 	 * etc...

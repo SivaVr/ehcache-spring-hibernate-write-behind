@@ -34,7 +34,7 @@ public class SuperHeroServiceImpl implements SuperHeroService {
 	public List<SuperHero> findById(Long id) {
 		// TODO Auto-generated method stub
 		log.info("*** Accessing heroService findById() ***");
-		return cachedSuperHeroDaoImpl.findById(id);
+		return (List<SuperHero>)cachedSuperHeroDaoImpl.findById(id);
 	}
 
 	@Override

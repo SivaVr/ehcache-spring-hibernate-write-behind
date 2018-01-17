@@ -19,7 +19,7 @@ import com.sivavr.ehcache.model.SuperHero;
 @Repository("superHeroDaoImpl")
 public class SuperHeroDAOImpl implements SuperHeroDAO {
 	private static final Logger log = Logger.getLogger(SuperHeroDAOImpl.class);
-	@Autowired
+	
 	private SessionFactory sessionFactory;
 	Session session = null;
 	Transaction tx = null;
@@ -27,7 +27,7 @@ public class SuperHeroDAOImpl implements SuperHeroDAO {
 	public SuperHeroDAOImpl() {
 
 	}
-
+	@Autowired
 	public SuperHeroDAOImpl(SessionFactory sessionFactory) {
 		// TODO Auto-generated constructor stub
 		this.sessionFactory = sessionFactory;
